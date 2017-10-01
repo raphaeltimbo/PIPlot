@@ -148,7 +148,7 @@ def PI_plot(tags, df, PIAttributes, ax=None,
         plt.savefig(folder + fignamepdf, bbox_inches='tight')
         plt.savefig(folder + fignamepng, bbox_inches='tight')
 
-    if len(n_units) > 1:
+    if n_units > 1:
         return axes
     else:
         return ax
