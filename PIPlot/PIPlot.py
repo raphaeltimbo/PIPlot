@@ -33,6 +33,10 @@ def PI_plot(tags, df, PIAttributes, ax=None,
         DataFrame with PI data.
     PIAttributes : dict
         Dictionary with PI tags metadata.
+    folder : str
+        Folder name.
+    figname : str
+        Figure name without extension. Will save .png and .pdf.
     ax : matplotlib.axes, optional
         Matplotlib axes where data will be plotted.
         If None creates a new.
