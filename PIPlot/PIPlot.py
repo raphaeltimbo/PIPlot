@@ -4,13 +4,16 @@ Provide functions for plotting data obtained from PI.
 """
 
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
-sns.set_style('white')
-sns.set_style({
+
+plt.style.use('seaborn-white')
+plt.style.use({
     'lines.linewidth': 2.5,
     'axes.grid': True,
+    'axes.labelsize': 18,
     'axes.linewidth': 0.1,
+    'xtick.labelsize': 16,
+    'ytick.labelsize': 16,
     'grid.color': '.9',
     'grid.linestyle': '--',
     'legend.frameon': True,
@@ -62,7 +65,7 @@ def PI_plot(tags, df, PIAttributes, ax=None,
             ax.plot(series, label=tag)
             ax.set_ylabel(units[0])
             ax.set_xlabel('Time')
-            ax.legend()
+            lgd = ax.legend()
     else:
         axes = [ax.twinx() for i in range(len(tagunits) - 1)]
         axes.insert(0, ax)
@@ -84,13 +87,13 @@ def PI_plot(tags, df, PIAttributes, ax=None,
                 line, = axes[idx].plot(series, label=tag)
                 axes[idx].set_xlabel('Time')
             else:
-                line, = axes[idx].plot(series, linestyle='--', alpha=0.3, label=tag)
+                line, = axes[idx].plot(series, linestyle='--', alpha=0.5, label=tag)
                 axes[idx].grid(False)
             lines.append(line)
             labels.append(line.get_label())
         ax = axes[0]
         box = ax.get_position()
-        ax.legend(lines, labels, loc='center left', bbox_to_anchor=(1.1, 0.5))
+        lgd = ax.legend(lines, labels, loc='center left', bbox_to_anchor=(1.1, 0.5), fontsize=14)
 
     if n_units == 3:
         # set the labels
@@ -110,14 +113,14 @@ def PI_plot(tags, df, PIAttributes, ax=None,
                 line, = axes[idx].plot(series, label=tag, color=next_color)
                 axes[idx].set_xlabel('Time')
             else:
-                line, = axes[idx].plot(series, linestyle='--', color=next_color, alpha=0.5, label=tag)
+                line, = axes[idx].plot(series, linestyle='--', color=next_color, alpha=0.7, label=tag)
                 axes[idx].grid(False)
             lines.append(line)
             labels.append(line.get_label())
         ax = axes[0]
         box = ax.get_position()
         ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-        ax.legend(lines, labels, loc='center left', bbox_to_anchor=(1.2, 0.5))
+        lgd = ax.legend(lines, labels, loc='center left', bbox_to_anchor=(1.2, 0.5))
 
         # Make some space on the right side for the extra y-axis.
         fig.subplots_adjust(right=0.75)
@@ -140,13 +143,14 @@ def PI_plot(tags, df, PIAttributes, ax=None,
             figname = (str(start.day) + '-' + str(start.month) + '-' + str(start.year) + start_hour
                        + '-' + str(end.day) + '-' + str(end.month) + '-' + str(end.year) + end_hour
                        + '-' + '_'.join(tags))
-            fignamepdf = figname + '.pdf'
-            fignamepng = figname + '.png'
+
+        fignamepdf = figname + '.pdf'
+        fignamepng = figname + '.png'
 
         print(f'Saving figure as {folder + figname}')
         plt.tight_layout()
-        plt.savefig(folder + fignamepdf, bbox_inches='tight')
-        plt.savefig(folder + fignamepng, bbox_inches='tight')
+        plt.savefig(folder + fignamepdf, bbox_extra_artists=(lgd,), bbox_inches='tight')
+        plt.savefig(folder + fignamepng, bbox_extra_artists=(lgd,), bbox_inches='tight')
 
     if n_units > 1:
         return axes
